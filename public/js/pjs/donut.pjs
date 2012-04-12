@@ -236,6 +236,7 @@ public class Donut {
   float angleAdjustment = 0.0;
   boolean opened = true;
   boolean showLabels = false;
+  String type = "";
   
   // callbacks TODO: clean this up!
   Object segmentChanged = function() {};
@@ -337,10 +338,14 @@ public class Donut {
   }
   
   public void addSegment(DonutSegment s) {
-    s.col = colors[colorCount%11]; // assign a color
+    s.col = coloursFor(type)[colorCount%11]; // assign a color
     if (colorCount==0)
       setSelectedSlice(s.slices[0]);
     segments.add(s);
     colorCount += 2;
+  }
+  
+  public void setType(String type) {
+    this.type = type;
   }
 }

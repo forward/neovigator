@@ -1,20 +1,87 @@
 import( '/js/pjs/Tween.lib' );
 import( '/js/pjs/util.lib' );
 
-color[] colors = new color[12];
+color[] defaultColors = new color[12];
+defaultColors[0] = color(171, 199, 49);
+defaultColors[1] = color(162, 195, 85);
+defaultColors[2] = color(154, 191, 123);
+defaultColors[3] = color(147, 186, 161);
+defaultColors[4] = color(141, 181, 200);
+defaultColors[5] = color(134, 162, 169);
+defaultColors[6] = color(128, 142, 137);
+defaultColors[7] = color(122, 122, 104);
+defaultColors[8] = color(177, 102, 73);
+defaultColors[9] = color(131, 127, 67);
+defaultColors[10] = color(144, 150, 60);
+defaultColors[11] = color(157, 175, 55);
 
-colors[0] = color(171, 199, 49);
-colors[1] = color(162, 195, 85);
-colors[2] = color(154, 191, 123);
-colors[3] = color(147, 186, 161);
-colors[4] = color(141, 181, 200);
-colors[5] = color(134, 162, 169);
-colors[6] = color(128, 142, 137);
-colors[7] = color(122, 122, 104);
-colors[8] = color(177, 102, 73);
-colors[9] = color(131, 127, 67);
-colors[10] = color(144, 150, 60);
-colors[11] = color(157, 175, 55);
+color[] dbColors = new color[12];
+dbColors[0] = color(255, 0, 0);
+dbColors[1] = color(255, 0, 64);
+dbColors[2] = color(255, 0, 128);
+dbColors[3] = color(255, 0, 255);
+dbColors[4] = color(128, 0, 0);
+dbColors[5] = color(128, 0, 64);
+dbColors[6] = color(128, 0, 128);
+dbColors[7] = color(128, 0, 255);
+dbColors[8] = color(0,   0, 0);
+dbColors[9] = color(0,   0, 64);
+dbColors[10] = color(0,  0, 128);
+dbColors[11] = color(0,  0, 255);
+
+color[] webColors = new color[12];
+webColors[0] = color(0, 255, 0);
+webColors[1] = color(0, 255, 64);
+webColors[2] = color(0, 255, 128);
+webColors[3] = color(0, 255, 255);
+webColors[4] = color(0, 128, 0);
+webColors[5] = color(0, 128, 64);
+webColors[6] = color(0, 128, 128);
+webColors[7] = color(0, 128, 255);
+webColors[8] = color(0,   0, 0);
+webColors[9] = color(0,   0, 64);
+webColors[10] = color(0,  0, 128);
+webColors[11] = color(0,  0, 255);
+
+color[] lbColors = new color[12];
+lbColors[0] = color(0, 255, 255);
+lbColors[1] = color(64, 255, 255);
+lbColors[2] = color(128, 255, 255);
+lbColors[3] = color(255, 255, 255);
+lbColors[4] = color(0, 128, 255);
+lbColors[5] = color(64, 128, 255);
+lbColors[6] = color(128, 128, 255);
+lbColors[7] = color(255, 128, 255);
+lbColors[8] = color(0,   0,   255);
+lbColors[9] = color(64,   0,   255);
+lbColors[10] = color(128,  0,   255);
+lbColors[11] = color(255,  0,   255);
+
+// HashMap colours = new HashMap();
+// colours.put("", defaultColors);
+// colours.put("db", dbColors);
+// colours.put("web", webColors);
+// colours.put("worker", workerColors);
+
+// var colours = new Object();
+// colours[""] = defaultColors;
+// colours["web"] = webColors;
+// colours["db"] = dbColors;
+// colours["elb"] = elbColors;
+// colours["worker"] = workerColors;
+
+void coloursFor(String type) {
+  if (type == "web") {
+    return webColors;
+  } else if (type == "db") {
+    return dbColors;
+  } else if (type == "lb") {
+    return lbColors;
+  } else {
+    return defaultColors;
+  }
+}
+
 
 color LABEL_COLOR = color(150);
 color HIGHLIGHTED_LABEL_COLOR = color(55);

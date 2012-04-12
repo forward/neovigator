@@ -92,6 +92,7 @@ public class Resource {
   String id = "";
   String name = "";
   String html = "";
+  String type = "";
   
   int NUM_LOADING_SEGMENTS = 11;
   int progress = 0;
@@ -136,6 +137,8 @@ public class Resource {
         that.id = response.data.id;
         that.name = response.data.name;
         that.html = response.details_html;
+        that.type = response.data.type;
+        that.donut.setType(response.data.type);
         
         $('#explanation').html(response.details_html);
         int numValues = 0;
@@ -311,7 +314,7 @@ public class Resource {
       // segments
       for (int i=0; i<NUM_LOADING_SEGMENTS; i++) {
         curContext.lineCap = "butt"; // processing.js patch!
-        stroke(colors[i*2%11]);
+        stroke(coloursFor(type)[i*2%11]);
         curContext.globalAlpha = alpha(i);
         strokeWeight(25);
         float angleStart = angle;
