@@ -107,7 +107,7 @@ class Neovigator < Sinatra::Application
 
    attributes = [{"name" => "No Relationships","name" => "No Relationships","values" => [{"id" => "#{params[:id]}","name" => "No Relationships "}]}] if attributes.empty?
 
-    @node = {:details_html => "<h2>Neo ID: #{node_id(node)}</h2>\n<p class='summary'>\n#{get_properties(node)}</p>\n",
+    @node = {:details_html => "<h2>Instance ID: #{node_id(node)}</h2>\n<p class='summary'>\n#{get_properties(node)}</p>\n",
               :data => {:attributes => attributes, 
                         :name => node["data"]["name"],
                         :id => node_id(node),
