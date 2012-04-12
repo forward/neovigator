@@ -43,6 +43,20 @@ webColors[9] = color(0,   0, 64);
 webColors[10] = color(0,  0, 128);
 webColors[11] = color(0,  0, 255);
 
+color[] appColors = new color[12];
+appColors[0] = color(255, 255, 0);
+appColors[1] = color(255, 255, 64);
+appColors[2] = color(255, 255, 128);
+appColors[3] = color(255, 255, 255);
+appColors[4] = color(128, 128, 0);
+appColors[5] = color(128, 128, 64);
+appColors[6] = color(128, 128, 128);
+appColors[7] = color(128, 128, 255);
+appColors[8] = color(0,   0, 0);
+appColors[9] = color(0,   0, 64);
+appColors[10] = color(0,  0, 128);
+appColors[11] = color(0,  0, 255);
+
 color[] lbColors = new color[12];
 lbColors[0] = color(0, 255, 255);
 lbColors[1] = color(64, 255, 255);
@@ -57,31 +71,20 @@ lbColors[9] = color(64,   0,   255);
 lbColors[10] = color(128,  0,   255);
 lbColors[11] = color(255,  0,   255);
 
-// HashMap colours = new HashMap();
-// colours.put("", defaultColors);
-// colours.put("db", dbColors);
-// colours.put("web", webColors);
-// colours.put("worker", workerColors);
-
-// var colours = new Object();
-// colours[""] = defaultColors;
-// colours["web"] = webColors;
-// colours["db"] = dbColors;
-// colours["elb"] = elbColors;
-// colours["worker"] = workerColors;
 
 void coloursFor(String type) {
   if (type == "web") {
     return webColors;
-  } else if (type == "db") {
-    return dbColors;
+  } else if (type == "app") {
+    return appColors;
   } else if (type == "lb") {
     return lbColors;
+  } else if (type == "db") {
+    return dbColors;
   } else {
     return defaultColors;
   }
 }
-
 
 color LABEL_COLOR = color(150);
 color HIGHLIGHTED_LABEL_COLOR = color(55);
