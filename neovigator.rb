@@ -24,32 +24,69 @@ class Neovigator < Sinatra::Application
     end
   end
 
-  def create_graph
+  def create_graph    
     graph_exists = neo.get_node_properties(1)
     return if graph_exists && graph_exists['name']
-
-    lb   = create_server('ih-products-api-lb', "lb")
-    web1 = create_server('ih-products-api-web-1', "web")
-    web2 = create_server('ih-products-api-web-2', "web")
-    db1  = create_server('ih-products-api-db-1', "db")
-    db2  = create_server('ih-products-api-db-2', "db")
+    
+    data = HTTParty.get("http://10.0.210.57:9292/data")
+    instances = data["eu-west-1"]["ec2_instances"]
+    instance_neo_map = {}
+    instances.each do |id, instance|
+      instance_neo_map[id] = create_node(id, instance)
+    end
+    
+    elbs = data["eu-west-1"]["elbs"]
+    elbs.each do |name, elb|
+      create_elb(name, elb, instance_neo_map)
+    end
     
     @neo.set_node_properties(0, name: "T'internet")
-    
-    create_join(0, lb, "80")
-    create_join(lb, web1, "80")
-    create_join(lb, web2, "80")
-    create_join(web1, db1, "27017")
-    create_join(web2, db1, "27017")
-    create_join(db1, db2, "27017")
   end
 
   def create_join(node1, node2, rel_type)
     neo.create_relationship(rel_type, node1, node2)
   end
 
-  def create_server(name, type)
-    neo.create_node("name" => name, "type" => type)
+  def create_node(id, instance)
+    name = instance["tags"]["Name"]
+    type = type_from_name(name)
+    neo.create_node({
+      "name" => name,
+      "instance" => id,
+      "dns_name" => instance["dns_name"],
+      "size" => instance["type"],
+      "internal_ip" => instance["private_ip_address"],
+      "type" => type,
+      "roles" => instance["tags"]["Roles"],
+      "project" => instance["tags"]["Project"]
+    })
+  end
+  
+  def create_elb(name, elb, instances)
+    elb_id = neo.create_node({
+      "name" => name,
+      "dns_name" => elb["dns"],
+      "type" => "lb",
+    })
+    create_join(0, elb_id, "All the internets")
+    
+    elb["instances"].each do |instance_id|
+      create_join(elb_id, instances[instance_id], "PORT")
+    end
+  end
+
+  def type_from_name(name)
+    case name
+    when /-lb/
+      'lb'
+    when /web/
+      'web'
+    when /mongo/
+    when /db/  
+      'db'
+    else
+      ''
+    end
   end
 
   def neighbours
@@ -123,5 +160,4 @@ class Neovigator < Sinatra::Application
     @neoid = params["neoid"]
     haml :index
   end
-
 end
