@@ -28,30 +28,28 @@ class Neovigator < Sinatra::Application
     graph_exists = neo.get_node_properties(1)
     return if graph_exists && graph_exists['name']
 
-    elb       = create_server('ih-products-api-elb')
-    web1      = create_server('ih-products-api-web-1')
-    web2      = create_server('ih-products-api-web-2')
-    worker1   = create_server('ih-products-api-workers-1')
-    worker2   = create_server('ih-products-api-workers-2')
-    db        = create_server('ih-products-api-db')
+    lb   = create_server('ih-products-api-lb', "lb")
+    web1 = create_server('ih-products-api-web-1', "web")
+    web2 = create_server('ih-products-api-web-2', "web")
+    db1  = create_server('ih-products-api-db-1', "db")
+    db2  = create_server('ih-products-api-db-2', "db")
     
     @neo.set_node_properties(0, name: "T'internet")
     
-    create_join(0, elb, "80")
-    create_join(elb, web1, "80")
-    create_join(elb, web2, "80")
-    create_join(web1, db, "7474")
-    create_join(web2, db, "7474")
-    create_join(worker1, db, "7474")
-    create_join(worker2, db, "7474")
+    create_join(0, lb, "80")
+    create_join(lb, web1, "80")
+    create_join(lb, web2, "80")
+    create_join(web1, db1, "27017")
+    create_join(web2, db1, "27017")
+    create_join(db1, db2, "27017")
   end
 
   def create_join(node1, node2, rel_type)
     neo.create_relationship(rel_type, node1, node2)
   end
 
-  def create_server(name)
-    neo.create_node("name" => name)
+  def create_server(name, type)
+    neo.create_node("name" => name, "type" => type)
   end
 
   def neighbours
