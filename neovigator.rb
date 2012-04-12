@@ -40,6 +40,13 @@ class Neovigator < Sinatra::Application
       create_elb(name, elb, instance_neo_map)
     end
     
+    traffic = data["eu-west-1"]["network_traffic"]
+    traffic.each do |instance_id, traffic|
+      traffic["destinations"].each do |destination|
+        create_join(instance_neo_map[instance_id], instance_neo_map[destination], "PORT") if instance_neo_map[destination]
+      end
+    end
+    
     @neo.set_node_properties(0, name: "T'internet")
   end
 
