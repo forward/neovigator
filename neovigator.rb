@@ -28,24 +28,29 @@ class Neovigator < Sinatra::Application
     graph_exists = neo.get_node_properties(1)
     return if graph_exists && graph_exists['name']
 
-    johnathan = create_person('Johnathan')
-    mark      = create_person('Mark')
-    phil      = create_person('Phil')
-    mary      = create_person('Mary')
-    luke      = create_person('Luke')
-    make_mutual(johnathan, mark, "friends")
-    make_mutual(mark, mary, "friends")
-    make_mutual(mark, phil, "friends")
-    make_mutual(phil, mary, "married")
-    make_mutual(phil, luke, "enemies")
+    elb       = create_server('ih-products-api-elb')
+    web1      = create_server('ih-products-api-web-1')
+    web2      = create_server('ih-products-api-web-2')
+    worker1   = create_server('ih-products-api-workers-1')
+    worker2   = create_server('ih-products-api-workers-2')
+    db        = create_server('ih-products-api-db')
+    
+    @neo.set_node_properties(0, name: "T'internet")
+    
+    create_join(0, elb, "80")
+    create_join(elb, web1, "80")
+    create_join(elb, web2, "80")
+    create_join(web1, db, "7474")
+    create_join(web2, db, "7474")
+    create_join(worker1, db, "7474")
+    create_join(worker2, db, "7474")
   end
 
-  def make_mutual(node1, node2, rel_type)
+  def create_join(node1, node2, rel_type)
     neo.create_relationship(rel_type, node1, node2)
-    neo.create_relationship(rel_type, node2, node1)
   end
 
-  def create_person(name)
+  def create_server(name)
     neo.create_node("name" => name)
   end
 
@@ -107,7 +112,8 @@ class Neovigator < Sinatra::Application
     @node = {:details_html => "<h2>Neo ID: #{node_id(node)}</h2>\n<p class='summary'>\n#{get_properties(node)}</p>\n",
               :data => {:attributes => attributes, 
                         :name => node["data"]["name"],
-                        :id => node_id(node)}
+                        :id => node_id(node),
+                        :type => node["data"]["type"]}
             }
 
     @node.to_json
