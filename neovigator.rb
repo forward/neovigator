@@ -47,7 +47,7 @@ class Neovigator < Sinatra::Application
       end
     end
     
-    @neo.set_node_properties(0, name: "T'internet")
+    @neo.set_node_properties(0, name: "T'internet", type: "internet")
   end
 
   def create_join(node1, node2, rel_type)

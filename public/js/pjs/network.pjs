@@ -71,6 +71,10 @@ lbColors[9] = color(64,   0,   255);
 lbColors[10] = color(128,  0,   255);
 lbColors[11] = color(255,  0,   255);
 
+color[] internetColors = new color[12];
+internetColors[0] = color(128, 0, 64);
+
+
 
 void coloursFor(String type) {
   if (type == "web") {
@@ -80,6 +84,8 @@ void coloursFor(String type) {
   } else if (type == "lb") {
     return lbColors;
   } else if (type == "db") {
+    return dbColors;
+  } else if (type == "internet") {
     return dbColors;
   } else {
     return defaultColors;
